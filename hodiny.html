@@ -149,9 +149,9 @@ function prepareTournament(){
  }
  $('count').value=String(tournamentPlayers.length);$('order').value='manual';renderSetup();
  document.querySelectorAll('.playeredit input').forEach(el=>el.disabled=true);
- $('count').disabled=true;$('order').disabled=true;$('starter').disabled=true;
- $('starterwrap').classList.add('hidden');$('resume').classList.add('hidden');
- const info=document.createElement('p');info.className='tip';info.textContent='🏆 TURNAJ MISTRŮ: Hráči, barvy i pořadí se převzali z turnaje.';
+ $('count').disabled=true;$('order').disabled=false;$('starter').disabled=false;
+ $('starterwrap').classList.remove('hidden');$('resume').classList.add('hidden');
+ const info=document.createElement('p');info.className='tip';info.textContent='🏆 TURNAJ MISTRŮ: Hráči a barvy jsou z turnaje. Vyber začínajícího hráče nebo náhodné pořadí.';
  $('setup').prepend(info);
 }
 const originalStartGame=startGame;
@@ -159,6 +159,8 @@ startGame=function(){
  if(TOURNAMENT_MODE){
   // Nepoužívat collect(): přepsal by převzaté profily z uzamčených polí.
   let players=config.map(p=>({...p}));
+  if($('order').value==='random'){for(let i=players.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[players[i],players[j]]=[players[j],players[i]]}}
+  else{const first=+$('starter').value;players=players.slice(first).concat(players.slice(0,first))}
   game={players,progress:players.map(()=>0),current:0,darts:[],turn:1,winner:null,log:[],last:'Hra začíná! První cíl: 20',matchId:TOURNAMENT_MATCH};
   undoStack=[];redoStack=[];save();render();return;
  }

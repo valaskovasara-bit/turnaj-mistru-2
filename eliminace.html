@@ -94,15 +94,25 @@ const ELIM_LAUNCH='naseSipkyEliminaceLaunchV3',ELIM_RESULT='naseSipkyEliminaceRe
 function tournamentLaunch(players,matchId){
  if(!Array.isArray(players)||players.length<2||players.length>8)return;
  const safe=players.map(p=>({name:String(p.name||'HRÁČ').slice(0,24),color:/^#[0-9a-f]{6}$/i.test(p.color)?p.color:'#F542B8',tournamentId:p.id}));
- let saved=load();
- if(saved&&saved.game&&saved.game.matchId===matchId&&saved.game.players.length===safe.length&&saved.game.players.every((p,i)=>p.tournamentId===safe[i].tournamentId)){
-  game=saved.game;undoStack=saved.undoStack||[];redoStack=saved.redoStack||[];
- }else{
-  game={matchId,players:safe,scores:safe.map(()=>0),kicks:safe.map(()=>0),current:0,darts:[],turn:1,winner:null,log:[],last:'Hra začíná!'};
-  undoStack=[];redoStack=[];save();
+ const saved=load();
+ if(saved?.game?.matchId===matchId&&saved.game.players.length===safe.length&&saved.game.players.every(p=>safe.some(q=>q.tournamentId===p.tournamentId))){
+  game=saved.game;undoStack=saved.undoStack||[];redoStack=saved.redoStack||[];render();return;
  }
- render();
+ config=safe.map(p=>({...p}));$('count').value=String(safe.length);$('order').value='manual';renderSetup();
+ document.querySelectorAll('.playeredit input').forEach(el=>el.disabled=true);
+ $('count').disabled=true;$('resume').classList.add('hidden');
+ const info=document.createElement('p');info.className='tip';info.textContent='🏆 TURNAJ MISTRŮ: Hráči a barvy jsou převzatí z turnaje. Vyber začínajícího hráče nebo náhodné pořadí.';$('setup').prepend(info);
+ game=null;render();
 }
+const originalEliminaceStart=startGame;
+startGame=function(){
+ if(!TOURNAMENT_MODE){originalEliminaceStart();return}
+ let players=config.map(p=>({...p}));
+ if($('order').value==='random'){for(let i=players.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[players[i],players[j]]=[players[j],players[i]]}}
+ else{const first=+$('starter').value;players=players.slice(first).concat(players.slice(0,first))}
+ game={matchId:new URLSearchParams(location.search).get('match'),players,scores:players.map(()=>0),kicks:players.map(()=>0),current:0,darts:[],turn:1,winner:null,log:[],last:'Hra začíná!'};
+ undoStack=[];redoStack=[];save();render();
+};
 function finishTournamentGame(){
  if(!game||game.winner===null)return;
  const winner=game.players[game.winner].tournamentId;
@@ -120,7 +130,7 @@ const originalRender=render;
 render=function(){originalRender();updateTournamentFinish()};
 drawBoard();
 if(TOURNAMENT_MODE){
- $('setup').classList.add('hidden');$('resume').classList.add('hidden');
+ $('resume').classList.add('hidden');
  let launch;try{launch=JSON.parse(localStorage.getItem(ELIM_LAUNCH))}catch{}
  const match=new URLSearchParams(location.search).get('match');
  if(launch&&launch.matchId===match){tournamentLaunch(launch.players,launch.matchId)}

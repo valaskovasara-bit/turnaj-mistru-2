@@ -120,10 +120,10 @@ function prepareTournament(){
  $('count').value=String(tournamentPlayers.length);$('order').value='manual';renderSetup();
  // Pořadí a barvy už určil turnaj, mění se jen počet figurek.
  document.querySelectorAll('.playeredit input').forEach(el=>el.disabled=true);
- $('count').disabled=true;$('order').disabled=true;$('starter').disabled=true;
+ $('count').disabled=true;$('order').disabled=false;$('starter').disabled=false;
  $('starterwrap').classList.add('hidden');
  $('resume').classList.add('hidden');
- const info=document.createElement('p');info.className='tip';info.textContent='🏆 TURNAJ MISTRŮ: Hráči, barvy i pořadí se převzali z turnaje. Vyber počet figurek a začni.';
+ const info=document.createElement('p');info.className='tip';info.textContent='🏆 TURNAJ MISTRŮ: Hráči a barvy jsou z turnaje. Pro tuto disciplínu si vyber pořadí nebo náhodné losování a počet figurek.';
  $('setup').insertBefore(info,$('piecesCount').previousElementSibling);
 }
 
