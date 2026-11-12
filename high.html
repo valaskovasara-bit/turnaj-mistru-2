@@ -1,0 +1,149 @@
+<!doctype html><html lang="cs"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#111827"><title>NEJVYŠŠÍ SKÓRE</title><style>
+:root{font-family:system-ui,-apple-system,Segoe UI,sans-serif;color:#f6f8ff;background:#101827}*{box-sizing:border-box}body{margin:0}main{max-width:850px;margin:auto;padding:14px 14px 50px}h1{font-size:30px;letter-spacing:2px;margin:4px 0 14px;text-align:center}h2{font-size:18px;margin:0 0 12px}.panel{background:#1a273a;border:1px solid #36485e;border-radius:17px;padding:15px;margin-bottom:13px}.muted{color:#afbed2;font-size:13px}button,input,select{font:inherit;min-height:45px;border:1px solid #536780;border-radius:11px;color:white;background:#293b54;padding:10px}button{font-weight:750;cursor:pointer;touch-action:manipulation}button:disabled{opacity:.4}button.primary{background:#277a69;border-color:#39aa92}button.danger{background:#693b48}button.selected{background:#ffe19c;color:#152034;border-color:#fff0bb}input[type=color]{padding:3px;width:54px;min-width:54px;height:46px}input[type=text]{min-width:0;width:100%}select{width:100%}.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.grow{flex:1}.playeredit{display:grid;grid-template-columns:40px minmax(0,1fr) 56px;gap:9px;align-items:center;margin:9px 0}.playeredit .idx{font-weight:800;color:#c8d5e8;text-align:center}.scoregrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.scorecard{border:2px solid var(--pc);background:#101e30;border-radius:15px;padding:12px;position:relative;min-width:0}.scorecard.active{box-shadow:0 0 0 2px #fff,0 0 18px var(--pc)}.scorecard .name{font-weight:900;font-size:16px;color:var(--pc);overflow-wrap:anywhere}.scorecard .num{font-size:39px;font-weight:900;line-height:1.2;color:var(--pc);font-variant-numeric:tabular-nums}.scorecard .sub{color:#c0cce0;font-size:13px}.on{font-size:11px;color:#111827;background:var(--pc);display:inline-block;border-radius:15px;padding:3px 8px;font-weight:850;margin-bottom:4px}.activebox{padding:12px;border:2px solid var(--pc);border-radius:12px;background:#101e30;margin:10px 0;font-weight:800}.numbers{display:none}.dartboard-wrap{max-width:330px;margin:0 auto}.dartboard{display:block;width:100%;height:auto;touch-action:manipulation}.dartboard .number-hit{cursor:pointer;outline:none}.dartboard .number-hit:focus-visible circle{stroke:#ffe19c;stroke-width:4}.dartboard .number-hit:active circle{fill:#58799c}.dartboard text{pointer-events:none;user-select:none}.board-mode{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:9px}.board-mode button{flex:1;min-width:0}.board-mode .modestatus{font-size:12px;text-align:center;min-width:68px;font-weight:850;color:#ffe19c}.boardhelp{text-align:center;margin-top:8px}.board-special{display:flex;justify-content:center;margin-top:10px}.board-special button{width:45%;max-width:180px}.numbers button{font-size:19px;padding:12px 0}.modes{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-bottom:10px}.special{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:8px}.hint{padding:10px 12px;background:#122237;border-left:3px solid #e8b960;border-radius:8px;margin:7px 0;font-size:14px;line-height:1.5}.pill{display:inline-block;padding:5px 9px;background:#31445e;border-radius:12px;font-size:12px}.log{max-height:175px;overflow:auto;color:#c4d0e0;font-size:13px}.log div{padding:6px 0;border-bottom:1px solid #34445b}.hidden{display:none!important}.footerbtns{display:flex;gap:8px;flex-wrap:wrap}.footerbtns button{flex:1}.tip{font-size:12px;color:#afbed2;margin-top:8px}#toast{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);background:#f3e4ae;color:#172033;border-radius:10px;padding:11px 18px;font-weight:700;display:none;z-index:10}@media(min-width:650px){.scoregrid{grid-template-columns:repeat(4,minmax(0,1fr))}}@media(max-width:420px){main{padding:9px 9px 45px}.panel{padding:11px}.scorecard{padding:9px}.scorecard .num{font-size:35px}.numbers{gap:5px}.numbers button{padding:11px 0}}
+
+/* Rozložení podle odsouhlaseného náhledu */
+#game .panel{padding:10px;margin-bottom:9px}
+#game .advice-panel{background:#1a273a}
+.advice-panel summary{cursor:pointer;font-weight:800;font-size:14px;list-style:none}
+.advice-panel summary::-webkit-details-marker{display:none}
+.advice-panel summary::after{content:' ▾';float:right}
+.advice-panel[open] summary::after{content:' ▴'}
+.advice-line{font-size:12px;line-height:1.4;margin-top:7px;color:#e8edf7}
+#game .scoregrid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+#game .scorecard{border-radius:10px;padding:8px 10px;box-shadow:none}
+#game .scorecard.active{box-shadow:inset 0 0 0 1px var(--pc)}
+#game .scorecard .num{font-size:32px;color:#f8fafc}
+#game .scorecard .name{font-size:15px}
+#game .scorecard .sub{font-size:11px}
+#game .scorecard .on{font-size:9px;margin-bottom:3px;padding:2px 6px}
+#game .activebox{display:none}
+#game .board-mode{margin:4px 0 7px}
+#game .board-mode button{font-size:13px;padding:9px 5px}
+#game .dartboard-wrap{max-width:480px;width:100%;margin:auto}
+#game .board-special{margin:6px 0 0}
+#game .board-special button{width:100%;max-width:none;min-height:59px;font-size:18px}
+#game .action-row{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:9px;align-items:stretch;margin-top:9px}
+#game #next{width:100%;min-height:68px;font-size:19px;background:#277a69;border:2px solid #50cbb0}
+#game .turn-label{border:2px solid var(--pc);background:#101e30;border-radius:11px;padding:8px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;min-width:0}
+#game .turn-label .current-name{color:var(--pc);font-size:17px;font-weight:900;overflow-wrap:anywhere}
+#game .turn-label .current-caption{font-size:11px;color:#cbd5e1;font-weight:700}
+#game .dartboard .number-hit:focus-visible path,#game .dartboard .number-hit:focus-visible circle{stroke:#ffe19c;stroke-width:4}
+#game .dartboard .number-hit:active path{fill:#b8aa8d}
+#game .boardhelp{font-size:11px;margin:4px 0}
+@media(min-width:650px){#game .scoregrid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:400px){#game .dartboard-wrap{max-width:100%}#game .scorecard .num{font-size:29px}#game .turn-label .current-name{font-size:15px}}
+
+/* Pouze barvy terče a krátké potvrzení klepnutí v barvě hráče. */
+#game .dartboard .number-hit.flash path,#game .dartboard .number-hit.flash circle{animation:dartHitFlash .48s ease-out both;fill:var(--flash-color)!important}
+@keyframes dartHitFlash{0%,55%{filter:brightness(1.3);opacity:1}100%{filter:brightness(1);opacity:1}}
+#game #turncounter{font-size:23px;font-weight:950;color:#fff;background:#30445f;border:2px solid #9bafc9;padding:8px 15px;border-radius:12px}#game #winhint .target-points{font-size:28px;font-weight:950;color:var(--pc);display:inline-block;margin:0 4px}#game #winhint{line-height:1.55}#game .advice-panel{border:2px solid #637992}</style></head><body><main><h1>🎯 NEJVYŠŠÍ SKÓRE</h1><section id="setup" class="panel"><h2>Nastavení hry</h2><div class="muted">Nasbírej nejvíc bodů · 3 šipky na tah · 5, 10, 15 nebo 20 kol</div><label>Počet hráčů</label><select id="count" onchange="renderSetup()"><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option></select><div id="editplayers"></div><label>Počet kol</label><select id="rounds"><option value="5">5 kol</option><option value="10" selected>10 kol</option><option value="15">15 kol</option><option value="20">20 kol</option></select><label>Pořadí hráčů</label><select id="order" onchange="renderSetup()"><option value="manual">Vlastní pořadí (podle seznamu)</option><option value="random">Náhodné pořadí</option></select><p class="tip">Při vlastním pořadí vyber, kdo začíná. Ostatní pokračují podle seznamu od něj.</p><div id="starterwrap"><label>První hráč</label><select id="starter"></select></div><button class="primary" style="width:100%;margin-top:14px" onclick="startGame()">ZAČÍT HRU</button><button id="resume" style="width:100%;margin-top:8px" class="hidden" onclick="resumeGame()">POKRAČOVAT V ULOŽENÉ HŘE</button></section>
+<section id="game" class="hidden">
+<details class="panel advice-panel" id="advice" open><summary>💡 Doporučený hod</summary><div id="winhint" class="advice-line"></div><div id="kickhints" class="advice-line"></div></details>
+<div class="panel"><div class="row"><span id="turncounter" class="pill"></span><span id="dartcounter" class="pill"></span></div><div id="activebox" class="activebox"></div><div id="scores" class="scoregrid" style="margin-top:7px"></div></div>
+<div class="panel" id="controls"><div class="board-mode"><button id="m2" onclick="setMult(mult===2?1:2)">DOUBLE ×2</button><div class="modestatus" id="modestatus">SINGLE ×1</div><button id="m3" onclick="setMult(mult===3?1:3)">TRIPLE ×3</button></div><div class="dartboard-wrap"><svg class="dartboard" id="dartboard" viewBox="0 0 400 400" role="group" aria-label="Klasický terč pro zadávání šipek"></svg></div><p class="tip boardhelp">Klepni na výseč terče. SINGLE ×1, DOUBLE ×2, TRIPLE ×3. BULL 25 / 50. Násobič se po každé šipce vrací na SINGLE.</p><div class="board-special"><button onclick="hit(0,'MIMO')">MIMO (0)</button></div><div class="action-row"><button class="primary" onclick="nextTurn()" id="next">DALŠÍ HRÁČ ➜</button><div class="turn-label" id="turnlabel"><span class="current-caption">🎯 PRÁVĚ HRAJE</span><span class="current-name" id="turnname"></span></div></div><div class="hint" id="lastdart"></div><p class="tip">Po třetí šipce se hráč vystřídá automaticky. DALŠÍ HRÁČ ukončí tah dřív.</p></div>
+<div class="panel"><div class="footerbtns"><button onclick="undo()">↶ ZPĚT</button><button onclick="redo()">↷ ZNOVU</button><button class="danger" onclick="resetGame()">NOVÁ HRA</button></div><h2 style="margin-top:16px">Historie</h2><div id="history" class="log"></div></div></section><div id="toast"></div></main><script>
+'use strict';const KEY='nejvyssi-skore-v1',BASE=[{name:'SÁJA',color:'#F542B8'},{name:'VOKUREK',color:'#A2E635'},{name:'HRÁČ 3',color:'#5EC8FF'},{name:'HRÁČ 4',color:'#FFB84D'},{name:'HRÁČ 5',color:'#B89AFF'},{name:'HRÁČ 6',color:'#FF7979'},{name:'HRÁČ 7',color:'#58E0C4'},{name:'HRÁČ 8',color:'#E7D46F'}];let config=BASE.map(x=>({...x})),game=null,undoStack=[],redoStack=[],mult=1;const $=id=>document.getElementById(id);const copy=x=>JSON.parse(JSON.stringify(x));const escapeHtml=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function renderSetup(){let n=+$('count').value;document.querySelectorAll('.playeredit').forEach((r,i)=>{let name=r.querySelector('input[type=text]'),color=r.querySelector('input[type=color]');if(name)config[i]={name:name.value,color:color.value}});$('editplayers').innerHTML=Array.from({length:n},(_,i)=>`<div class="playeredit"><span class="idx">${i+1}.</span><input type="text" maxlength="24" aria-label="Jméno hráče ${i+1}" value="${escapeHtml(config[i].name)}"><input type="color" aria-label="Barva hráče ${i+1}" value="${config[i].color}"></div>`).join('');let prev=$('starter').value;$('starter').innerHTML=Array.from({length:n},(_,i)=>`<option value="${i}">${escapeHtml(config[i].name)}</option>`).join('');if(prev&&+prev<n)$('starter').value=prev;$('starterwrap').classList.toggle('hidden',$('order').value==='random')}
+function collect(){document.querySelectorAll('.playeredit').forEach((r,i)=>{config[i]={name:r.querySelector('input[type=text]').value.trim().toUpperCase()||'HRÁČ '+(i+1),color:r.querySelector('input[type=color]').value}})}
+function save(){try{localStorage.setItem(KEY,JSON.stringify({game,undoStack,redoStack}))}catch(e){toast('Nepodařilo se uložit stav!')}}function load(){try{let v=JSON.parse(localStorage.getItem(KEY));if(v&&v.game&&Array.isArray(v.game.players)&&v.game.players.length>=2&&v.game.players.length<=8)return v}catch(e){}return null}
+function toast(t){$('toast').textContent=t;$('toast').style.display='block';setTimeout(()=>$('toast').style.display='none',1900)}
+function startGame(){collect();let n=+$('count').value,players=copy(config.slice(0,n));if($('order').value==='random'){for(let i=n-1;i>0;i--){let j=Math.floor(Math.random()*(i+1));[players[i],players[j]]=[players[j],players[i]]}}else{let first=+$('starter').value;players=players.slice(first).concat(players.slice(0,first))}game={players,scores:players.map(()=>0),rounds:+$('rounds').value,current:0,darts:[],turn:1,winner:null,finished:false,log:[],last:'Hra začíná!'};undoStack=[];redoStack=[];save();render()}
+function resumeGame(){let v=load();if(!v){toast('Uložená hra nenalezena');return}game=v.game;undoStack=v.undoStack||[];redoStack=v.redoStack||[];render()}
+function mutate(fn){undoStack.push(copy(game));if(undoStack.length>500)undoStack.shift();redoStack=[];fn();save();render()}
+function undo(){if(!undoStack.length){toast('Není co vrátit');return}redoStack.push(copy(game));game=undoStack.pop();save();render()}
+function redo(){if(!redoStack.length){toast('Není co zopakovat');return}undoStack.push(copy(game));game=redoStack.pop();save();render()}
+function hit(value,label){if(!game||game.finished||game.darts.length>=3)return;mutate(()=>{let i=game.current;game.scores[i]+=value;game.darts.push({value,label});game.last=`${game.players[i].name}: ${label} (+${value}) · celkem ${game.scores[i]}`;game.log.unshift(game.last);if(game.darts.length===3)advance()});setMult(1)}
+function advance(){if(game.current===game.players.length-1&&game.turn>=game.rounds*game.players.length){finishGame();return}game.current=(game.current+1)%game.players.length;game.darts=[];game.turn++;game.last='Na řadě '+game.players[game.current].name}
+function finishGame(){game.finished=true;let max=Math.max(...game.scores);game.winners=game.scores.map((v,i)=>v===max?i:-1).filter(i=>i>=0);game.winner=game.winners.length===1?game.winners[0]:null;game.last=game.winners.length===1?'🏆 VÍTĚZ: '+game.players[game.winner].name:'🏆 REMÍZA: '+game.winners.map(i=>game.players[i].name).join(', ');game.log.unshift(game.last)}
+function nextTurn(){if(!game||game.finished)return;mutate(()=>{game.log.unshift(`${game.players[game.current].name}: konec tahu (${game.darts.length}/3 šipek)`);advance()})}
+function resetGame(){if(!confirm('Opravdu začít novou hru? Rozehraná hra se smaže.'))return;game=null;undoStack=[];redoStack=[];localStorage.removeItem(KEY);$('resume').classList.add('hidden');renderSetup();render()}
+function setMult(v){mult=v;for(let i of [2,3])$('m'+i).classList.toggle('selected',i===v);$('modestatus').textContent=v===1?'SINGLE ×1':v===2?'DOUBLE ×2':'TRIPLE ×3'}
+function render(){let exists=!!game;$('setup').classList.toggle('hidden',exists);$('game').classList.toggle('hidden',!exists);if(!exists){$('resume').classList.toggle('hidden',!load());return}let g=game,i=g.current,p=g.players[i],round=Math.min(g.rounds,Math.floor((g.turn-1)/g.players.length)+1),remaining=3-g.darts.length;let best=Math.max(...g.scores),lead=best-g.scores[i];$('turncounter').textContent='Kolo '+round+' / '+g.rounds;$('dartcounter').textContent=g.finished?'KONEC':'Šipka '+(g.darts.length+1)+' / 3';$('activebox').style.setProperty('--pc',p.color);$('activebox').innerHTML=g.finished?'🏆 '+escapeHtml(g.last):'🎯 NA ŘADĚ: '+escapeHtml(p.name);
+$('scores').innerHTML=g.players.map((pl,j)=>`<div class="scorecard ${j===i&&!g.finished?'active':''}" style="--pc:${pl.color}">${j===i&&!g.finished?'<span class="on">PRÁVĚ HÁZÍ</span>':''}<div class="name">${escapeHtml(pl.name)}</div><div class="num">${g.scores[j]}</div><div class="sub">${g.scores[j]===best?'🏅 Průběžné vedení':'Na vedoucího: '+(best-g.scores[j])+' bodů'}</div></div>`).join('');$('turnlabel').style.setProperty('--pc',g.finished&&g.winner!==null?g.players[g.winner].color:p.color);$('turnname').textContent=g.finished?g.last:p.name;
+// Doporučení míří výhradně na nejbližšího hráče s vyšším skóre.
+let ahead=g.scores.filter((score,j)=>j!==i&&score>g.scores[i]).sort((a,b)=>a-b)[0];
+let target=ahead===undefined?null:ahead-g.scores[i];
+$('advice').style.setProperty('--pc',p.color);
+if(g.finished){$('winhint').textContent='🏆 '+g.last;$('kickhints').textContent='Konečné skóre je v tabulce hráčů.'}
+else if(target===null){$('winhint').innerHTML='🏅 <b>Jsi na průběžném prvním místě nebo na děleném vedení.</b>';$('kickhints').textContent='Snaž se získat co nejvíce bodů.'}
+else {
+ let choices=[];for(let n=1;n<=20;n++)for(let m=1;m<=3;m++)choices.push({score:n*m,label:(m===1?'S':m===2?'D':'T')+n});choices.push({score:25,label:'BULL 25'},{score:50,label:'BULL 50'});
+ // Jediná šipka, která stačí k dorovnání; nejmenší přestřelení.
+ choices.sort((a,b)=>a.score-b.score);
+ let best=choices.find(x=>x.score>=target);
+ let recommendation=best?best.label+' ('+best.score+' b.)':'T20 (60 b.)';
+ $('winhint').innerHTML='🎯 Na nejbližšího hráče před tebou potřebuješ <span class="target-points">'+target+'</span> bodů. <b>Zkus '+recommendation+'</b>';
+ $('kickhints').textContent=best?'Doporučený zásah stačí alespoň k dorovnání.':'Jednou šipkou to už nedoženeš; míř na T20 a pokračuj dalšími šipkami.';
+}
+$('lastdart').textContent=g.last;$('controls').classList.toggle('hidden',g.finished);$('history').innerHTML=g.log.slice(0,80).map(x=>`<div>${escapeHtml(x)}</div>`).join('')||'<div>Zatím bez hodů.</div>'}
+// Klasický světlý/tmavý terč. Každá výseč je klikací; násobič se vybírá zvlášť.
+const NS='http://www.w3.org/2000/svg';const ring=[20,1,18,4,13,6,10,15,2,17,3,19,7,16,8,11,14,9,12,5];
+function svgEl(tag,attrs,parent){let el=document.createElementNS(NS,tag);for(let [k,v] of Object.entries(attrs))el.setAttribute(k,v);parent.appendChild(el);return el}
+function flashSegment(g){const c=game&&game.players&&game.players[game.current]?game.players[game.current].color:'#ffe19c';g.style.setProperty('--flash-color',c);g.classList.remove('flash');void g.getBoundingClientRect();g.classList.add('flash');setTimeout(()=>g.classList.remove('flash'),480)}
+function drawBoard(){let board=$('dartboard'),cx=200,cy=200,step=Math.PI/10;const polar=(r,a)=>[cx+r*Math.sin(a),cy-r*Math.cos(a)];
+svgEl('circle',{cx,cy,r:195,fill:'#303438',stroke:'#8c9bac','stroke-width':3},board);
+ring.forEach((n,i)=>{let a=(i-.5)*step,b=(i+.5)*step,p=polar(174,a),q=polar(174,b),angle=i*step;
+let g=svgEl('g',{class:'number-hit',role:'button',tabindex:'0','aria-label':'Číslo '+n},board);
+svgEl('path',{d:`M200 200 L${p[0]} ${p[1]} A174 174 0 0 1 ${q[0]} ${q[1]}Z`,fill:i%2===0?'#151515':'#f0e4cb',stroke:'#a6a39b','stroke-width':1.1},g);
+let xy=polar(142,angle),t=svgEl('text',{x:xy[0],y:xy[1]+7,'text-anchor':'middle','font-size':23,'font-weight':800,fill:i%2===0?'#f0e4cb':'#151515'},g);t.textContent=n;
+let choose=()=>{flashSegment(g);hit(n*mult,(mult===1?'S':mult===2?'D':'T')+n)};g.addEventListener('click',choose);g.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();choose()}});
+});
+// Dvě velké soustředné klikací oblasti: vnitřní kruh 50, mezikruží 25.
+let outer=svgEl('g',{class:'number-hit',role:'button',tabindex:'0','aria-label':'BULL 25'},board);
+svgEl('circle',{cx,cy,r:106,fill:'#20854b',stroke:'#eee','stroke-width':2},outer);
+let inner=svgEl('g',{class:'number-hit',role:'button',tabindex:'0','aria-label':'BULL 50'},board);
+svgEl('circle',{cx,cy,r:49,fill:'#bd273b',stroke:'#e0e4e6','stroke-width':2},inner);
+outer.addEventListener('click',()=>{flashSegment(outer);hit(25,'BULL 25')});
+inner.addEventListener('click',e=>{e.stopPropagation();flashSegment(inner);hit(50,'BULL 50')});
+for(let [g,v,l] of [[outer,25,'BULL 25'],[inner,50,'BULL 50']])g.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();e.stopPropagation();flashSegment(g);hit(v,l)}});
+}
+// Turnajový režim: přenos hráčů a návrat vítěze, bez zásahu do pravidel hry.
+const TOURNAMENT_MODE=new URLSearchParams(location.search).get('turnaj')==='1';
+const TOURNAMENT_MATCH=new URLSearchParams(location.search).get('match');
+const NEW_LAUNCH='naseSipkyhighLaunchV1',NEW_RESULT='naseSipkyhighResultV1';
+function finishTournamentGame(){
+ if(!TOURNAMENT_MODE||!game||(!game.finished||game.winner===null))return;
+ const winner=game.players[game.winner]?.tournamentId;
+ if(!winner)return alert('Nepodařilo se určit vítěze turnaje.');
+ localStorage.setItem(NEW_RESULT,JSON.stringify({matchId:TOURNAMENT_MATCH,winner}));
+ location.href='./index.html';
+}
+function updateTournamentFinish(){
+ if(!TOURNAMENT_MODE)return;
+ let b=document.getElementById('tournamentFinish');
+ if(!b){b=document.createElement('button');b.id='tournamentFinish';b.className='primary';b.style.cssText='display:none;width:100%;margin:12px 0 8px;padding:18px;font-size:20px;font-weight:950;border-radius:14px';b.textContent='🏆 ODEHRÁNO – ZPĚT DO TURNAJE';b.onclick=finishTournamentGame;document.querySelector('#game').insertBefore(b,document.querySelector('#game').children[1]);}
+ b.style.display=game&&(game.finished&&game.winner!==null)?'block':'none';
+}
+const originalRender=render;
+render=function(){originalRender();updateTournamentFinish()};
+function prepareTournament(){
+ let launch;try{launch=JSON.parse(localStorage.getItem(NEW_LAUNCH))}catch{}
+ if(!launch||launch.matchId!==TOURNAMENT_MATCH||!Array.isArray(launch.players)||launch.players.length<2||launch.players.length>8){alert('Turnajová hra nebyla nalezena.');location.replace('./index.html');return;}
+ const tournamentPlayers=launch.players.map(p=>({name:String(p.name||'HRÁČ').slice(0,24),color:/^#[0-9a-f]{6}$/i.test(p.color)?p.color:'#F542B8',tournamentId:p.id}));
+ config=tournamentPlayers.map(p=>({...p}));
+ let previous=load();
+ if(previous?.game?.matchId===TOURNAMENT_MATCH&&previous.game.players.length===tournamentPlayers.length&&previous.game.players.every((p,i)=>p.tournamentId===tournamentPlayers[i].tournamentId)){
+   game=previous.game;undoStack=previous.undoStack||[];redoStack=previous.redoStack||[];render();return;
+ }
+ $('count').value=String(tournamentPlayers.length);$('order').value='manual';renderSetup();
+ document.querySelectorAll('.playeredit input').forEach(el=>el.disabled=true);
+ $('count').disabled=true;$('order').disabled=false;$('starter').disabled=false;
+ $('starterwrap').classList.remove('hidden');$('resume').classList.add('hidden');
+ const info=document.createElement('p');info.className='tip';info.textContent='🏆 TURNAJ MISTRŮ: Hráči a barvy jsou z turnaje. Vyber začínajícího hráče nebo náhodné pořadí.';
+ $('setup').prepend(info);
+}
+const originalStartGame=startGame;
+startGame=function(){
+ if(TOURNAMENT_MODE){
+  // Nepoužívat collect(): přepsal by převzaté profily z uzamčených polí.
+  let players=config.map(p=>({...p}));
+  if($('order').value==='random'){for(let i=players.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[players[i],players[j]]=[players[j],players[i]]}}
+  else{const first=+$('starter').value;players=players.slice(first).concat(players.slice(0,first))}
+  game={players,scores:players.map(()=>0),rounds:+$('rounds').value,current:0,darts:[],turn:1,winner:null,finished:false,log:[],last:'Hra začíná!',matchId:TOURNAMENT_MATCH};
+  undoStack=[];redoStack=[];save();render();return;
+ }
+ originalStartGame();
+};
+drawBoard();
+if(TOURNAMENT_MODE)prepareTournament();else{renderSetup();if(load())$('resume').classList.remove('hidden');}
+</script></body></html>
