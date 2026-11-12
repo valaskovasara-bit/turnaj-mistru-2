@@ -87,13 +87,15 @@ outer.addEventListener('click',()=>{flashSegment(outer);hit(25,'BULL 25')});
 inner.addEventListener('click',e=>{e.stopPropagation();flashSegment(inner);hit(50,'BULL 50')});
 for(let [g,v,l] of [[outer,25,'BULL 25'],[inner,50,'BULL 50']])g.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();e.stopPropagation();flashSegment(g);hit(v,l)}});
 }
-// Režim Turnaje mistrů: přebírá hráče i pořadí, nepoužívá nastavení samostatné hry.
+// Turnajová hra je samostatná stránka. Komunikace probíhá přes localStorage,
+// takže zůstává plná šířka i výška a Safari neblokuje nové okno.
 const TOURNAMENT_MODE=new URLSearchParams(location.search).get('turnaj')==='1';
-function tournamentLaunch(players, fresh, matchId){
+const ELIM_LAUNCH='naseSipkyEliminaceLaunchV3',ELIM_RESULT='naseSipkyEliminaceResultV3';
+function tournamentLaunch(players,matchId){
  if(!Array.isArray(players)||players.length<2||players.length>8)return;
  const safe=players.map(p=>({name:String(p.name||'HRÁČ').slice(0,24),color:/^#[0-9a-f]{6}$/i.test(p.color)?p.color:'#F542B8',tournamentId:p.id}));
  let saved=load();
- if(!fresh&&saved&&saved.game&&saved.game.matchId===matchId&&saved.game.players.length===safe.length&&saved.game.players.every((p,i)=>p.tournamentId===safe[i].tournamentId)){
+ if(saved&&saved.game&&saved.game.matchId===matchId&&saved.game.players.length===safe.length&&saved.game.players.every((p,i)=>p.tournamentId===safe[i].tournamentId)){
   game=saved.game;undoStack=saved.undoStack||[];redoStack=saved.redoStack||[];
  }else{
   game={matchId,players:safe,scores:safe.map(()=>0),kicks:safe.map(()=>0),current:0,darts:[],turn:1,winner:null,log:[],last:'Hra začíná!'};
@@ -101,20 +103,27 @@ function tournamentLaunch(players, fresh, matchId){
  }
  render();
 }
-window.addEventListener('message',ev=>{
- if(ev.origin!==location.origin||!ev.data||ev.data.type!=='turnaj-eliminace-start')return;
- tournamentLaunch(ev.data.players,ev.data.fresh,ev.data.matchId);
-});
-function notifyTournament(){
- if(!TOURNAMENT_MODE||!game)return;
- parent.postMessage({type:'turnaj-eliminace-status',winner:game.winner===null?null:game.players[game.winner].tournamentId,finished:game.winner!==null},location.origin);
+function finishTournamentGame(){
+ if(!game||game.winner===null)return;
+ const winner=game.players[game.winner].tournamentId;
+ if(!winner)return;
+ localStorage.setItem(ELIM_RESULT,JSON.stringify({matchId:game.matchId,winner}));
+ location.href='./index.html';
+}
+function updateTournamentFinish(){
+ if(!TOURNAMENT_MODE)return;
+ let b=document.getElementById('tournamentFinish');
+ if(!b){b=document.createElement('button');b.id='tournamentFinish';b.className='primary';b.style.cssText='display:none;width:100%;margin:12px 0 8px;padding:18px;font-size:20px;font-weight:950;border-radius:14px';b.textContent='🏆 ODEHRÁNO – ZPĚT DO TURNAJE';b.onclick=finishTournamentGame;document.querySelector('#game').insertBefore(b,document.querySelector('#game').children[1]);}
+ b.style.display=game&&game.winner!==null?'block':'none';
 }
 const originalRender=render;
-render=function(){originalRender();notifyTournament()};
+render=function(){originalRender();updateTournamentFinish()};
 drawBoard();
 if(TOURNAMENT_MODE){
  $('setup').classList.add('hidden');$('resume').classList.add('hidden');
- parent.postMessage({type:'turnaj-eliminace-ready'},location.origin);
+ let launch;try{launch=JSON.parse(localStorage.getItem(ELIM_LAUNCH))}catch{}
+ const match=new URLSearchParams(location.search).get('match');
+ if(launch&&launch.matchId===match){tournamentLaunch(launch.players,launch.matchId)}
+ else{alert('Turnajová hra nebyla nalezena. Vrať se do turnaje a spusť ji znovu.');location.replace('./index.html')}
 }else{renderSetup();if(load())$('resume').classList.remove('hidden')}
-
 </script></body></html>
